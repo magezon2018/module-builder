@@ -4,9 +4,9 @@
  */
 ?>
 <?php
-$elements          = $this->getElements();
+$elements          = $block->getElements();
 $count             = count($elements);
-$element           = $this->getElement();
+$element           = $block->getElement();
 $id                = $element->getId();
 $activeTab         = $element->hasData('active_tab') ? (int)$element->getActiveTab() - 1 : 0;
 $hideEmptyTab      = $element->getData('hide_empty_tab');
@@ -31,7 +31,7 @@ $mobileAccordion   = $element->getData('mobile_accordion');
 		}
 	}
 ?>
-	<div class="mgz-tabs mgz-tabs-<?= $id ?> mgz-element-tab-align-<?= $tabAlign ?> mgz-element-tab-position-<?= $tabPosition ?> <?= $noFillContentArea ? 'mgz-tabs-no-fill-content' : '' ?> <?= $mobileAccordion ? 'tabs-mobile-accordion' : '' ?>" data-mage-init='{"Magezon_Builder/js/tabs":{"hover_active": <?= $hoverActive ? 'true' : 'false' ?>}}' data-spacing="<?= $spacing ?>" data-gap="<?= $gap ?>">
+	<div class="mgz-tabs mgz-tabs-<?= $escaper->escapeHtmlAttr($id) ?> mgz-element-tab-align-<?= $escaper->escapeHtmlAttr($tabAlign) ?> mgz-element-tab-position-<?= $escaper->escapeHtmlAttr($tabPosition) ?> <?= $noFillContentArea ? 'mgz-tabs-no-fill-content' : '' ?> <?= $mobileAccordion ? 'tabs-mobile-accordion' : '' ?>" data-mage-init='{"Magezon_Builder/js/tabs":{"hover_active": <?= $hoverActive ? 'true' : 'false' ?>}}' data-spacing="<?= $escaper->escapeHtmlAttr($spacing) ?>" data-gap="<?= $escaper->escapeHtmlAttr($gap) ?>">
 		<div class="mgz-tabs-nav">
 			<?php foreach ($tabs as $index => $tab) { ?>
 				<?php
@@ -41,14 +41,14 @@ $mobileAccordion   = $element->getData('mobile_accordion');
 				$iconPosition = $_element->getData('icon_position');
 				$icon         = $_element->getData('icon');
 				?>
-				<div class="<?= $id ?> tab-<?= $id ?>-title mgz-tabs-tab-title<?= ($index===$activeTab) ? ' mgz-active' : '' ?>" data-id="tab-<?= $id ?>-title">
-					<a href="#tab-<?= $id ?>" data-id="#tab-<?= $id ?>">
+				<div class="<?= $escaper->escapeHtmlAttr($id) ?> tab-<?= $escaper->escapeHtmlAttr($id) ?>-title mgz-tabs-tab-title<?= ($index===$activeTab) ? ' mgz-active' : '' ?>" data-id="tab-<?= $escaper->escapeHtmlAttr($id) ?>-title">
+					<a href="#tab-<?= $escaper->escapeHtmlAttr($id) ?>" data-id="#tab-<?= $escaper->escapeHtmlAttr($id) ?>">
 						<?php if ($addIcon && $icon && $iconPosition == 'left') { ?>
-							<i class="<?= $icon ?>"></i>
+							<i class="<?= $escaper->escapeHtmlAttr($icon) ?>"></i>
 						<?php } ?>
-						<span><?= $_element->getTitle() ?></span>
+						<span><?= $escaper->escapeHtml($_element->getTitle()) ?></span>
 						<?php if ($addIcon && $icon && $iconPosition == 'right') { ?>
-							<i class="<?= $icon ?>"></i>
+							<i class="<?= $escaper->escapeHtmlAttr($icon) ?>"></i>
 						<?php } ?>
 						<span class="tabs-opener"></span>
 					</a>
@@ -61,8 +61,8 @@ $mobileAccordion   = $element->getData('mobile_accordion');
 				$_element = $tab['element'];
 				$id       = $_element->getId();
 				?>
-				<div class="<?= $id ?> tab-<?= $id ?>-content mgz-tabs-tab-content<?= ($index===$activeTab) ? ' mgz-active' : '' ?>" id="tab-<?= $id ?>">
-					<?= $tab['html'] ?>
+				<div class="<?= $escaper->escapeHtmlAttr($id) ?> tab-<?= $escaper->escapeHtmlAttr($id) ?>-content mgz-tabs-tab-content<?= ($index===$activeTab) ? ' mgz-active' : '' ?>" id="tab-<?= $escaper->escapeHtmlAttr($id) ?>">
+					<?= /* @noEscape */ $tab['html'] ?>
 				</div>
 			<?php } ?>
 		</div>

@@ -13,35 +13,129 @@ define([
 				var parent = $controller('baseController', {$scope: $scope});
 				angular.extend(this, parent);
 
+				var resolveImageUrl = function(image) {
+					if (!image) {
+						return '';
+					}
+					var src = '';
+
+					if (image.indexOf('http') === 0 || image.indexOf('___directive') !== -1) {
+						src = image;
+					} else {
+						src = magezonBuilderUrl.getImageUrl(image);
+					}
+
+					return magezonBuilderUrl.getImageUrl(image);
+				}
+
 				$scope.getSrc = function() {
-					var src = magezonBuilderUrl.getImageUrl($scope.element.image);
+					var src = resolveImageUrl($scope.element.image);
 
-					switch($scope.element.source) {
-						case 'media_library':
-							if ($scope.element.image)
-							src = magezonBuilderUrl.getImageUrl($scope.element.image);
-							break;
-
-						case 'external_link':
-							if ($scope.element.custom_src)
-							src = $scope.element.custom_src;
-							break;
+					if ($scope.element.source === 'external_link' && $scope.element.custom_src) {
+						src = $scope.element.custom_src;
 					}
 
 					return src;
 				}
+
+				$scope.getHoverSrc = function() {
+					return resolveImageUrl($scope.element.hover_image);
+				}
 			},
 			link: function(scope, element) {
-				element.find('.mgz-single-image-inner').hover(function() {
-					var hoverImage = magezonBuilderUrl.getImageUrl(scope.element.hover_image);
-					if (hoverImage) {
-						$(this).find('img').attr('src', hoverImage);
+
+				var inner = element.find('.mgz-single-image-inner');
+				var eventNs = '.mgzSingleImageHover';
+				var preloadedHoverSrc = '';
+
+				var getImage = function() {
+					return inner.find('img').first();
+				}
+
+				var lockImageSize = function(img) {
+					if (!img.length || img.data('mgzTempSizeLock')) {
+						return;
 					}
-				}, function() {
-					var hoverImage = magezonBuilderUrl.getImageUrl(scope.element.hover_image);
-					if (hoverImage && scope.getSrc()) {
-						$(this).find('img').attr('src', scope.getSrc());
+
+					var hasConfiguredSize = !!(
+						scope.element.image_width ||
+						scope.element.image_height ||
+						img.attr('width') ||
+						img.attr('height')
+					);
+					if (!hasConfiguredSize) {
+						var width = img.outerWidth();
+						var height = img.outerHeight();
+						if (width > 0 && height > 0) {
+							img.css({
+								width: width + 'px',
+								height: height + 'px'
+							});
+							img.data('mgzTempSizeLock', true);
+						}
 					}
+				};
+
+				var unlockImageSize = function(img) {
+					if (!img.length || !img.data('mgzTempSizeLock')) {
+						return;
+					}
+
+					img.css({
+						width: '',
+						height: ''
+					});
+					img.removeData('mgzTempSizeLock');
+				};
+
+				var preloadHoverImage = function(src) {
+					if (!src || src === preloadedHoverSrc) {
+						return;
+					}
+
+					var preloader = new Image();
+					preloader.src = src;
+					preloadedHoverSrc = src;
+				};
+
+				var showHoverImage = function() {
+					var img = getImage();
+					if (!img.length) {
+						return;
+					}
+
+					var hoverSrc = scope.getHoverSrc();
+					if (!hoverSrc) {
+						return;
+					}
+
+					preloadHoverImage(hoverSrc);
+					var currentSrc = img.attr('src');
+					lockImageSize(img);
+					if (currentSrc !== hoverSrc) {
+						img.attr('src', hoverSrc);
+					}
+				};
+
+				var showMainImage = function() {
+					var img = getImage();
+					if (!img.length) {
+						return;
+					}
+
+					var mainSrc = scope.getSrc();
+					if (mainSrc && img.attr('src') !== mainSrc) {
+						img.attr('src', mainSrc);
+					}
+
+					unlockImageSize(img);
+				};
+
+				inner.on('mouseenter' + eventNs, showHoverImage);
+				inner.on('mouseleave' + eventNs, showMainImage);
+
+				scope.$on('$destroy', function () {
+					inner.off(eventNs);
 				});
 			},
 			controllerAs: 'mgz'

@@ -89,22 +89,22 @@ define([
             left = this.core.coordinates(this.previous) - this.core.coordinates(this.next);
             previous.one($.support.animation.end, clear)
                 .css( { 'left': left + 'px' } )
-                .addClass('animated owl-animated-out')
-                .addClass(outgoing);
+                .addClass('owl-animated-out')
+                .addClass(/^(mgz_|owl[-_])/.test(outgoing) ? outgoing : 'animate__animated animate__' + outgoing);
         }
 
         if (incoming) {
             next.one($.support.animation.end, clear)
-                .addClass('animated owl-animated-in')
-                .addClass(incoming);
+                .addClass('owl-animated-in')
+                .addClass(/^(mgz_|owl[-_])/.test(incoming) ? incoming : 'animate__animated animate__' + incoming);
         }
     };
 
     Animate.prototype.clear = function(e) {
         $(e.currentTarget).css( { 'left': '' } )
-            .removeClass('animated owl-animated-out owl-animated-in')
-            .removeClass(this.core.settings.animateIn)
-            .removeClass(this.core.settings.animateOut);
+            .removeClass('animate__animated owl-animated-out owl-animated-in')
+            .removeClass(/^(mgz_|owl[-_])/.test(this.core.settings.animateIn) ? this.core.settings.animateIn : 'animate__' + this.core.settings.animateIn)
+            .removeClass(/^(mgz_|owl[-_])/.test(this.core.settings.animateOut) ? this.core.settings.animateOut : 'animate__' + this.core.settings.animateOut);
         this.core.onTransitionEnd();
     };
 
@@ -210,7 +210,8 @@ define([
                 var animationEndEvent = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
                 _elem.each(function() {
                     var $elem = $(this);
-                    var $animationType = 'animated ' + $elem.data( 'animate-' + _InOut );
+                    var $animateName = $elem.data( 'animate-' + _InOut );
+                    var $animationType = /^(mgz_|owl[-_])/.test($animateName) ? $animateName : 'animate__animated animate__' + $animateName;
                     var $animationDelay = $elem.data('animate-delay') ? $elem.data('animate-delay') + 's' : 0;
                     $elem.css('-webkit-animation-delay', $animationDelay)
                     .css('-moz-animation-delay', $animationDelay)

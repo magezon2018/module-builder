@@ -11,14 +11,24 @@ $titleAlign   = $element->getData('title_align') ? $element->getData('title_alig
 $addIcon      = $element->getData('add_icon');
 $iconPosition = $element->getData('icon_position');
 $icon         = $element->getData('icon');
+$allowedTags = ['h1','h2','h3','h4','h5','h6'];
+if (!in_array($titleTag, $allowedTags, true)) {
+    $titleTag = 'h4';
+}
 ?>
-<div class="mgz-element-separator-wrapper mgz-text-<?= $titleAlign ?>">
+<div class="mgz-element-separator-wrapper mgz-text-<?= $escaper->escapeHtmlAttr($titleAlign) ?>">
 	<?php if ($title || ($addIcon && $icon)) { ?>
-	<<?= $titleTag ?> class="title">
+	<<?= /* @noEscape */ $titleTag ?> class="title">
 		<?php if ($addIcon && $icon && $iconPosition == 'left') { ?>
-			<i class="mgz-icon-element <?= $icon ?>"></i><?php } ?><?php if ($title) { ?><span><?= $title ?></span><?php } ?><?php if ($addIcon && $icon && $iconPosition == 'right') { ?><i class="mgz-icon-element <?= $icon ?>"></i>
+			<i class="mgz-icon-element <?= $escaper->escapeHtmlAttr($icon) ?>"></i>
 		<?php } ?>
-	</<?= $titleTag ?>>
+		<?php if ($title) { ?>
+			<span><?= $escaper->escapeHtml($title) ?></span>
+		<?php } ?>
+		<?php if ($addIcon && $icon && $iconPosition == 'right') { ?>
+			<i class="mgz-icon-element <?= $escaper->escapeHtmlAttr($icon) ?>"></i>
+		<?php } ?>
+	</<?= /* @noEscape */ $titleTag ?>>
 	<?php } ?>
 	<div class="mgz-element-separator-line"></div>
 </div>

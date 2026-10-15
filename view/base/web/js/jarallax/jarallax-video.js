@@ -475,7 +475,19 @@
                             e.appendChild(p.$video),
                             document.body.appendChild(e)
                         }
-                        p.player = p.player || new Vimeo(p.$video,p.playerOptions),
+                        if (!p.player) {
+                            if (typeof Vimeo === 'function') {
+                                p.player = new Vimeo(p.$video, p.playerOptions);
+                            } else if (typeof Vimeo === 'object' && Vimeo && typeof Vimeo.Player === 'function') {
+                                p.player = new Vimeo.Player(p.$video, p.playerOptions);
+                            } else if (typeof window !== 'undefined'
+                                && window.Vimeo
+                                && typeof window.Vimeo.Player === 'function') {
+                                p.player = new window.Vimeo.Player(p.$video, p.playerOptions);
+                            } else {
+                                console.warn('Unable to detect Vimeo player constructor');
+                            }
+                        }
                         p.options.startTime && p.options.autoplay && p.player.setCurrentTime(p.options.startTime),
                         p.player.getVideoWidth().then(function(e) {
                             p.videoWidth = e || 1280

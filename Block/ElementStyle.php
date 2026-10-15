@@ -434,7 +434,7 @@ class ElementStyle extends \Magento\Framework\View\Element\Template
             $styles['background-color'] = $dataHelper->getStyleColor($element->getData('line_color'));
             $stylesHtml = $this->parseStyles($styles);
             if ($stylesHtml) {
-                $html .= $htmlId . ' .mgz-block-heading-line:before{';
+                $html .= $htmlId . ' .mgz-elem-heading-line:before{';
                 $html .= $stylesHtml;
                 $html .= '}';
             }

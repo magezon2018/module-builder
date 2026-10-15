@@ -21,17 +21,31 @@ define([
                 }
             });
 
-            var activeTab = function(tab) {
-                $tabsList.children().removeClass('mgz-active');
-                $tabsContent.children().removeClass('mgz-active');
-                var parentId = tab.parent().attr('data-id');
-                self.element.find('.' + parentId).addClass('mgz-active');
-                var targetId = tab.data('id') ? tab.data('id') : tab.attr('href');
-                var target = self.element.find(targetId);
-                target.addClass('mgz-active');
-                $(self.element).parents('.mgz-element').trigger('mgz:change');
-                setTimeout(function() {
-                    target.find('.owl-carousel.mgz-carousel-hidden').removeClass('mgz-carousel-hidden');
+            var activeTab = function(anchor) {
+                var $title   = anchor.closest('.mgz-tabs-tab-title'),
+                isOpen   = $title.hasClass('mgz-active'),
+                parentId = $title.attr('data-id'),
+                targetId = anchor.data('id') ? anchor.data('id') : anchor.attr('href'),
+                $target   = self.element.find(targetId);
+                /* --- collapse -------------------------------------------------- */
+                if(isOpen) {
+                    $title.removeClass('mgz-active');
+                    if(parentId) { self.element.find('.' + parentId). removeClass('mgz-active'); }
+                    $target.removeClass('mgz-active'). attr('style' , '');
+                    $(self.element). parents('.mgz-element'). trigger('mgz:change');
+                    return true;                     // stop here – nothing to open
+                }
+                /* --- open (Original logic) --------------------------- */
+                $tabsList.children (). removeClass('mgz-active');
+                $tabsContent.children (). removeClass('mgz-active');
+
+                $title.addClass('mgz-active');
+                if(parentId) { self.element.find('.' + parentId). addClass('mgz-active'); }
+                $target.addClass('mgz-active');
+                $(self.element). parents('.mgz-element'). trigger('mgz:change');
+                setTimeout(function () {
+                    $target.find('.owl-carousel.mgz-carousel-hidden')
+                            .removeClass('mgz-carousel-hidden');
                 }, 500);
 
                 return true;

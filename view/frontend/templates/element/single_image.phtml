@@ -19,6 +19,27 @@ $hoverOverlayColor = $element->getData('hover_overlay_color');
 $imageHoverEffect = $element->getData('image_hover_effect');
 $imgId = $element->getData('img_id');
 $src = $block->getSrc();
+if ($src && !$width && !$height) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
+    $mediaDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+    $relativePath = preg_replace('/^.*\/media\//', '', $src);
+    // The file can legitimately be absent (deleted from media, stale path, or an
+    // image served from a CDN): fall back to no width/height instead of letting
+    // getimagesize() raise a warning that Magento turns into a fatal error.
+    if ($relativePath && $mediaDirectory->isFile($relativePath)) {
+        try {
+            $imageSize = getimagesize($mediaDirectory->getAbsolutePath($relativePath));
+        } catch (\Throwable $e) {
+            // Magento's error handler turns the warning into an exception in
+            // developer mode; in production it only logs and returns false.
+            $imageSize = false;
+        }
+        if (is_array($imageSize)) {
+            list($width, $height) = $imageSize;
+        }
+    }
+}
 $link = $block->getLink();
 $srcset = $block->getSrcset();
 $wrapperClasses = $block->getImgWrapperClasses();
@@ -31,51 +52,51 @@ $portraitPhoneImage  = $helper->getImageUrl($element->getData('portrait_phone_im
 $responsiveImages    = $element->getData('responsive_images');
 ?>
 <?php if ($src) {?>
-	<?php $alt = $alt ? $alt : $block->getFilename($src);?>
-	<div class="<?=$wrapperClasses;?>">
-		<div class="mgz-single-image-inner <?=$contentPosition ? 'mgz-flex-position-' . $contentPosition : '';?> <?=$imageHoverEffect ? 'hover-type-' . $imageHoverEffect : '';?> <?=$link['url'] ? 'mgz-image-link' : '';?>">
-		<?php if ($link['url']) {?>
-			<a class="<?=$linkClasses;?>"
-			href="<?=$link['url'];?>"
-			data-type="<?=$onclick == 'video_map' ? 'iframe' : 'image';?>"
-			data-title="<?=$title;?>"
-			data-zoom="<?=$zoomEffect ? '1' : '0';?>"
-			<?=$link['blank'] ? 'target="_blank"' : '';?> <?=$link['nofollow'] ? 'rel="nofollow"' : '';?>
-			>
-		<?php }?>
-			<?php if ($responsiveImages === 'custom') { ?>
-				<picture>
-					<?php if ($portraitPhoneImage) { ?>
-						<source srcset="<?= $tabletImage ?>" media="(min-width: 1024px)" />
-					<?php } ?>
-					<?php if ($landscapePhoneImage) { ?>
-					<source srcset="<?= $landscapePhoneImage ?>" media="(min-width: 768px)" />
-					<?php } ?>
-					<?php if ($portraitPhoneImage) { ?>
-					<source srcset="<?= $portraitPhoneImage ?>" media="(min-width: 576px)" />
-					<?php } ?>
-			<?php } ?>
-					<img <?=$imgId ? 'id="' . $imgId . '"' : '';?> class="mgz-hover-main" src="<?=$src;?>" alt="<?=$alt;?>" <?=$width ? 'width="' . $width . '"' : '';?> <?=$height ? 'height="' . $height . '"' : '';?> title="<?=$block->escapeHtml($title);?>" <?php if ($hoverImage) {?>data-hover="<?=$hoverImage;?>"<?php }?>/>
+    <?php $alt = $alt ? $alt : $block->getFilename($src);?>
+    <div class="<?= $escaper->escapeHtmlAttr($wrapperClasses); ?>">
+        <div class="mgz-single-image-inner <?= $contentPosition ? 'mgz-flex-position-' . $escaper->escapeHtmlAttr($contentPosition) : ''; ?> <?= $imageHoverEffect ? 'hover-type-' . $escaper->escapeHtmlAttr($imageHoverEffect) : ''; ?> <?= $link['url'] ? 'mgz-image-link' : ''; ?>">
+        <?php if ($link['url']) { ?>
+			<a class="<?= $escaper->escapeHtmlAttr($linkClasses); ?>"
+            href="<?= $escaper->escapeUrl($link['url']); ?>"
+            data-type="<?= $onclick == 'video_map' ? 'iframe' : 'image'; ?>"
+            data-title="<?= $escaper->escapeHtmlAttr($title); ?>"
+            data-zoom="<?=$zoomEffect ? '1' : '0'; ?>"
+            <?= $link['blank'] ? 'target="_blank"' : ''; ?> <?= $link['nofollow'] ? 'rel="nofollow"' : ''; ?>
+            >
+        <?php }?>
+            <?php if ($responsiveImages === 'custom') { ?>
+                <picture>
+                    <?php if ($portraitPhoneImage) { ?>
+                    <source srcset="<?= $escaper->escapeUrl($portraitPhoneImage) ?>" media="(max-width: 576px)" />
+                    <?php } ?>
+                    <?php if ($landscapePhoneImage) { ?>
+                    <source srcset="<?= $escaper->escapeUrl($landscapePhoneImage) ?>" media="(max-width: 768px)" />
+                    <?php } ?>
+                    <?php if ($portraitPhoneImage) { ?>
+                    <source srcset="<?= $escaper->escapeUrl($tabletImage) ?>" media="(max-width: 1024px)" />
+                    <?php } ?>
+            <?php } ?>
+                    <img <?= $imgId ? 'id="' . $escaper->escapeHtmlAttr($imgId) . '"' : '' ?> class="mgz-hover-main" src="<?= $escaper->escapeUrl($src); ?>" alt="<?= $escaper->escapeHtmlAttr($alt); ?>" <?=$width ? 'width="' . $escaper->escapeHtmlAttr($width) . '"' : ''; ?> <?=$height ? 'height="' . $escaper->escapeHtmlAttr($height) . '"' : '';?> title="<?=$block->escapeHtml($title);?>" <?php if ($hoverImage) { ?>data-hover="<?= $escaper->escapeHtmlAttr($hoverImage); ?>"<?php } ?>/>
 
-			<?php if ($responsiveImages === 'custom') { ?>
-				</picture>
-			<?php } ?>
-		<?php if ($link['url']) {?>
-			</a>
-		<?php }?>
-			<?php if (($title || $description) && $contentPosition && ($contentPosition != 'never')) {?>
-				<div class="image-content">
-					<?php if ($title) {?>
-					<div class="image-title"><?=$title;?></div>
-					<?php }?>
-					<?php if ($description) {?>
-					<div class="image-description"><?=$description;?></div>
-					<?php }?>
-				</div>
-			<?php }?>
-		</div>
-		<?php if ($overlayColor || $hoverOverlayColor) {?>
-			<div class="mgz-overlay"></div>
-		<?php }?>
-	</div>
+            <?php if ($responsiveImages === 'custom') { ?>
+                </picture>
+            <?php } ?>
+        <?php if ($link['url']) {?>
+            </a>
+        <?php }?>
+            <?php if (($title || $description) && $contentPosition && ($contentPosition != 'never')) {?>
+                <div class="image-content">
+                    <?php if ($title) {?>
+                    <div class="image-title"><?= $escaper->escapeHtml($title) ?></div>
+                    <?php }?>
+                    <?php if ($description) {?>
+                    <div class="image-description"><?= $escaper->escapeHtml($description) ?></div>
+                    <?php }?>
+                </div>
+            <?php }?>
+        </div>
+        <?php if ($overlayColor || $hoverOverlayColor) {?>
+            <div class="mgz-overlay"></div>
+        <?php }?>
+    </div>
 <?php }?>

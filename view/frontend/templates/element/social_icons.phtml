@@ -14,11 +14,11 @@ $followButton = $element->getData('follow_button');
 		$link  = $coreHelper->filter($item['link'] ? $item['link'] : '#');
 		?>
 		<li>
-			<a href="<?= $link ?>" target="<?= $linkTarget ?>" rel="noreferrer" title="<?= __('Follow on %1', $label) ?>">
-				<i id="<?= $id ?>-mgz-socialicons-item<?= $i ?>" class="<?= $item['icon'] ?>"></i>
+			<a href="<?= $escaper->escapeUrl($link) ?>" target="<?= $escaper->escapeHtmlAttr($linkTarget) ?>" rel="noreferrer" title="<?= $escaper->escapeHtmlAttr(__('Follow on %1', $label)) ?>">
+				<i id="<?= $escaper->escapeHtmlAttr($id) ?>-mgz-socialicons-item<?= $escaper->escapeHtmlAttr($i) ?>" class="<?= $escaper->escapeHtmlAttr($item['icon']) ?>"></i>
 			</a>
 			<?php if ($followButton) { ?>
-				<a href="<?= $link ?>" class="mgz-socialicons-follow-button" title="<?= $block->escapeHtml($label) ?>"><?= __('Follow') ?></a>
+				<a href="<?= $escaper->escapeUrl($link) ?>" class="mgz-socialicons-follow-button" title="<?= $block->escapeHtml($label) ?>"><?= $escaper->escapeHtml(__('Follow')) ?></a>
 			<?php } ?>
 		</li>	
 	<?php } ?>

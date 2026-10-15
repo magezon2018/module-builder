@@ -19,6 +19,17 @@ use Magento\Framework\HTTP\ClientInterface;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
+     * User agent sent with every request to the template library.
+     *
+     * Magento\Framework\HTTP\Client\Curl sends no User-Agent header at all, and a
+     * request without one is rejected by the server hosting the library, which then
+     * answers with an HTML error page instead of the expected JSON.
+     *
+     * @var string
+     */
+    const HTTP_USER_AGENT = 'Mozilla/5.0 (compatible; MagezonBuilder; +https://www.magezon.com)';
+
+    /**
      * vendor/magento/framework/View/Template/Html/Minifier.php
      * All inline HTML tags
      *
@@ -678,8 +689,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 'value' => 'fab mgz-fa-facebook-f',
             ],
             [
-                'label' => __('Twitter'),
-                'value' => 'fab mgz-fa-twitter',
+                'label' => __('X'),
+                'value' => 'fab mgz-fa-x-twitter',
+            ],
+            [
+                'label' => __('Tiktok'),
+                'value' => 'fab mgz-fa-tiktok'
+            ],
+            [
+                'label' => __('Bluesky'),
+                'value' => 'fab mgz-fa-bluesky'
             ],
             [
                 'label' => __('Pinterest'),
@@ -724,6 +743,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             [
                 'label' => __('Behance'),
                 'value' => 'fab mgz-fa-behance',
+            ],
+            [
+                'label' => __('Whatsapp'),
+                'value' => 'fab mgz-fa-whatsapp',
             ],
         ];
     }
@@ -844,6 +867,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             if ($templates) {
                 return $this->coreHelper->unserialize($templates);
             }
+            $this->client->addHeader('User-Agent', self::HTTP_USER_AGENT);
             $this->client->get($url);
             $content = $this->client->getBody();
             if ($content) {

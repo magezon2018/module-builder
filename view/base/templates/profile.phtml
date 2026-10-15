@@ -1,15 +1,15 @@
 <?php
 $elements      = $this->getElements();
 $customCss     = $block->getCustomCss();
-$customClasses = $this->getCustomClasses() ? ' ' . $this->getCustomClasses() : '';
+$customClasses = $this->getCustomClasses() ? ' ' . $block->escapeHtmlAttr($this->getCustomClasses()) : '';
 $html          = '';
 ?>
 <?php foreach ($elements as $_element) {
 	$html .= $_element->toHtml();
 } ?>
 <?php if ($html) { ?>
-<div class="magezon-builder magezon-builder-preload<?= $customClasses ?>">
-	<?= $html ?>
-	<?php if ($customCss) { ?><style class="mgz-style"><?= $customCss ?></style><?php } ?>
+<div class="magezon-builder magezon-builder-preload<?= /* @noEscape */ $customClasses ?>">
+	<?= /* @noEscape */ $html ?>
+	<?php if ($customCss) { ?><style class="mgz-style"><?= /* @noEscape */ $customCss ?></style><?php } ?>
 </div>
 <?php } ?>

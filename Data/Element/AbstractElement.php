@@ -14,7 +14,9 @@
 
 namespace Magezon\Builder\Data\Element;
 
-abstract class AbstractElement extends \Magento\Framework\DataObject
+use Magento\Framework\DataObject;
+
+abstract class AbstractElement extends DataObject
 {
     const TAB_GENERAL    = 'tab_general';
     const TAB_DISPLAY    = 'tab_display';

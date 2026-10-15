@@ -83,6 +83,9 @@ class Template extends \Magento\Backend\App\Action
             $post = $this->getRequest()->getPostValue();
             if (isset($post['item']) && $post['item']) {
                 $item = $post['item'];
+                // Kept for every request made below, images included -- the client
+                // sends no User-Agent of its own and the library host rejects that.
+                $this->client->addHeader('User-Agent', \Magezon\Builder\Helper\Data::HTTP_USER_AGENT);
                 $this->client->get($item['file']);
                 $content = $this->client->getBody();
                 if ($content) {

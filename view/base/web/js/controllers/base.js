@@ -95,9 +95,12 @@ define([
 			var classes = [];
 			if (element.animation_in) {
 				classes.push('mgz-animated');
-				classes.push(element.animation_in);
-				// classes.push('mgz_start_animation');
-				// classes.push('animated');
+				if (/^(mgz_|owl[-_])/.test(element.animation_in)) {
+					classes.push(element.animation_in);
+				} else {
+					classes.push('animate__animated');
+					classes.push('animate__' + element.animation_in);
+				}
 				if (element.animation_infinite) {
 					classes.push('mgz-animated-infinite');
 				}
@@ -571,7 +574,7 @@ define([
 				if (durationTime) $(self.element).css("animation-duration", durationTime + 's');
 
 				setTimeout(function() {
-					$(self.element).addClass("mgz_start_animation animated")
+					$(self.element).addClass("mgz_start_animation")
 				}, delayTime * 1000);
 			}, {
 				offset: "85%"

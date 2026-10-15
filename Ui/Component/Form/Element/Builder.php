@@ -25,6 +25,16 @@ class Builder extends \Magento\Ui\Component\Form\Element\AbstractElement
     const NAME = 'wysiwyg';
 
     /**
+     * Template rendering the deferred-load wrapper for the builder field.
+     *
+     * Resolved through late static binding, so a subclass can route the field
+     * through its own wrapper without re-declaring this constructor. Used by
+     * Magezon_PageBuilderAdapter to swap in its dual-mode (gen1 AngularJS ↔
+     * gen2 React editor) template.
+     */
+    const AJAX_TEMPLATE = 'Magezon_Builder::ajax.phtml';
+
+    /**
      * @var Form
      * @since 100.1.0
      */
@@ -64,7 +74,7 @@ class Builder extends \Magento\Ui\Component\Form\Element\AbstractElement
             $data['config']['template']    = 'ui/form/field';
             $block  = $layoutFactory->create()->createBlock(\Magento\Backend\Block\Template::class)
             ->addData($config)
-            ->setTemplate('Magezon_Builder::ajax.phtml')
+            ->setTemplate(static::AJAX_TEMPLATE)
             ->setTargetId($htmlId);
             if (isset($config['ajax_data'])) {
                 $block->setAjaxData($config['ajax_data']);

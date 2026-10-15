@@ -41,10 +41,12 @@ class Builder extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magezon\Builder\Model\CompositeConfigProvider $configProvider,
+        \Magento\Backend\Model\UrlInterface $urlBuilder,
         array $data = []
     ) {
         parent::__construct($context, $data);
 		$this->configProvider = $configProvider;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -66,6 +68,7 @@ class Builder extends \Magento\Framework\View\Element\Template
             $config['htmlId']        = $this->getRequest()->getParam('html_id');
             $config['targetId']      = $this->getTargetId();
             $config['allowed_types'] = ['row'];
+            $config['mediaGalleryUrl'] = $this->urlBuilder->getUrl('media_gallery/index/index');
             $this->_config = $config;
         }
         return $this->_config;

@@ -8,7 +8,7 @@ $element   = $this->getElement();
 $blockName = $element->getBlockName();
 ?>
 <?php if ($blockName) { ?>
-	<div class="mgz-element-custom-block-<?= $blockName ?>">
-		<?= $block->renderElement($blockName) ?>
+	<div class="mgz-element-custom-block-<?= $escaper->escapeHtmlAttr($blockName) ?>">
+		<?= /* @noEscape */ $block->renderElement($blockName) ?>
 	</div>
 <?php } ?>

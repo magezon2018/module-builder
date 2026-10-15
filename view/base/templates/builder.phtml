@@ -1,36 +1,39 @@
 <?php
-$config            = $this->getBuilderConfig();
-$id                = $this->getHtmlId();
-$targetId          = $this->getTargetId();
-$additionalClasses = $this->getAdditionalClasses();
-$url               = $this->getUrl('mgzpagebuilder/product/wysiwyg');
+$config            = $block->getBuilderConfig();
+$id                = $block->getHtmlId();
+$targetId          = $block->getTargetId();
+$additionalClasses = $block->getAdditionalClasses();
+$url               = $block->getUrl('mgzpagebuilder/product/wysiwyg');
+
+$idJs       = $block->escapeJs($id);
+$targetIdJs = $block->escapeJs($targetId);
 ?>
-<div class="mgz-builder <?= $additionalClasses ?>" id="<?= $id ?>" ng-controller="magezonBuilderCtrl">
+<div class="mgz-builder <?= $block->escapeHtmlAttr($additionalClasses) ?>" id="<?= $block->escapeHtmlAttr($id) ?>" ng-controller="magezonBuilderCtrl">
 	<magezon-builder profile="profile"></magezon-builder>
 </div>
-<style id="<?= $targetId ?>-styles"></style>
+<style id="<?= $block->escapeHtmlAttr($targetId) ?>-styles"></style>
 <script type="text/javascript">
 	window.magezonBuilder = {
-		viewFileUrl: '<?= $this->getBuilderViewFileUrl() ?>'
+		viewFileUrl: '<?= $block->escapeJs($block->getBuilderViewFileUrl()) ?>'
 	}
 	require([
 		'jquery',
 		'angular',
 		'magezonBuilder',
 		'api-check'
-		<?= $this->getModulePaths() ?>
+		<?= /* @noEscape */ $block->getModulePaths() ?>
 	], function($, angular, mgzBuilder, apiCheck) {
-		var parent = $('#<?= $targetId ?>').closest('.admin__field');
+		var parent = $('#<?= /* @noEscape */ $targetIdJs ?>').closest('.admin__field');
 		if (parent.parent().hasClass('admin__field-control')) {
 			parent.parent().addClass('magezon-builder-active-wrapper');
 			var width = parent.parent().parent().width() * .72;
 			parent.parent().width(width);
-			$('#<?= $id ?>').width(width);
+			$('#<?= /* @noEscape */ $idJs ?>').width(width);
 		}
 		apiCheck.globalConfig.disabled = true;
-		var builderConfig = <?= $this->getSerializedBuilderConfig() ?>;
+		var builderConfig = <?= /* @noEscape */ $block->getSerializedBuilderConfig() ?>;
 		window.builderConfig = builderConfig;
-		var app = angular.module('<?= $id ?>', ['magezonBuilder' <?= $this->getModuleKeys() ?>], function config(magezonBuilderConfigProvider, formlyConfigProvider) {
+		var app = angular.module('<?= /* @noEscape */ $idJs ?>', ['magezonBuilder' <?= /* @noEscape */ $block->getModuleKeys() ?>], function config(magezonBuilderConfigProvider, formlyConfigProvider) {
 			formlyConfigProvider.disableWarnings = true;
 			formlyConfigProvider.extras.removeChromeAutoComplete = true;
   			formlyConfigProvider.extras.explicitAsync = true;
@@ -64,7 +67,7 @@ $url               = $this->getUrl('mgzpagebuilder/product/wysiwyg');
 			$rootScope.parseFloat            = parseFloat;
 			$rootScope.builderConfig         = builderConfig;
 			$rootScope.$sce                  = $sce;
-			$rootScope.rootId                = '<?= $id ?>-wrapper';
+			$rootScope.rootId                = '<?= /* @noEscape */ $idJs ?>-wrapper';
 			$rootScope.fullscreen            = false;
 			$rootScope.history               = [];
 			magezonBuilderModal.registerModals(builderConfig.modals);
@@ -78,9 +81,9 @@ $url               = $this->getUrl('mgzpagebuilder/product/wysiwyg');
 			$httpProvider.useLegacyPromiseExtensions = false;
 		}]);
 		app.controller('magezonBuilderCtrl', ['$scope', '$rootScope', '$timeout', function($scope, $rootScope, $timeout) {
-			var parent = $('#<?= $targetId ?>').closest('.admin__field');
+			var parent = $('#<?= /* @noEscape */ $targetIdJs ?>').closest('.admin__field');
 			parent.addClass('mgz-builder-wrapper');
-			parent.addClass('<?= $id ?>-wrapper');
+			parent.addClass('<?= /* @noEscape */ $idJs ?>-wrapper');
 			if (parent.parent().hasClass('admin__control-grouped')) {
 				parent.parent().addClass('mgz-builder-grouped-wrapper');
 			}
@@ -88,14 +91,14 @@ $url               = $this->getUrl('mgzpagebuilder/product/wysiwyg');
 		<?php
 			if (isset($config['controllers'])) {
 				foreach ($config['controllers'] as $key => $path) { ?>
-					require(['<?= $path ?>'], function(_controller) {
-						app.controller('<?= $key ?>', _controller);
+					require(['<?= $block->escapeJs($path) ?>'], function(_controller) {
+						app.controller('<?= $block->escapeJs($key) ?>', _controller);
 					});
 				<?php }
 			}
 		?>
 		require(['domReady!'], function (document) {
-			angular.bootstrap(document.getElementById('<?= $id ?>'), ['<?= $id ?>'], {
+			angular.bootstrap(document.getElementById('<?= /* @noEscape */ $idJs ?>'), ['<?= /* @noEscape */ $idJs ?>'], {
 				//strictDi: true
 			});
 		});

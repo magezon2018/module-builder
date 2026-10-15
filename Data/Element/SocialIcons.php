@@ -265,7 +265,7 @@ class SocialIcons extends \Magezon\Builder\Data\Element\AbstractElement
 					'link' => 'https://www.facebook.com/magezonvn'
     			],
     			[
-					'icon' => 'fab mgz-fa-twitter',
+					'icon' => 'fab mgz-fa-x-twitter',
 					'link' => 'https://twitter.com/magezonvn'
     			],
     			[

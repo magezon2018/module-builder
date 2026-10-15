@@ -175,7 +175,8 @@ class Element extends ElementStyle implements ElementInterface
 		if (!$builderElement->getData('is_collection')) $classes[] = 'mgz-child';
 		$classes[] = 'mgz-element-' . $element->getType();
 		if ($element->getAnimationIn()) {
-			$classes[] = 'mgz-animated ' . $element->getAnimationIn();
+			$animationIn = $element->getAnimationIn();
+			$classes[] = 'mgz-animated ' . ((strpos($animationIn, 'mgz_') === 0 || strpos($animationIn, 'owl-') === 0 || strpos($animationIn, 'owl_') === 0) ? $animationIn : 'animate__animated animate__' . $animationIn);
 			if ($element->getAnimationInfinite()) $classes[] = 'mgz-animated-infinite';
 		}
 		if ($element->getElClass()) $classes[] = $element->getElClass();

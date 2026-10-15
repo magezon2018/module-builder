@@ -30,7 +30,7 @@ define([
 				}
 				if (durationTime) $(self.element).css("animation-duration", durationTime + 's');
 				setTimeout(function() {
-					$(self.element).addClass("mgz_start_animation animated")
+					$(self.element).addClass("mgz_start_animation")
 				}, delayTime * 1000);
 			}, {
 				offset: "85%"

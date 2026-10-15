@@ -221,6 +221,7 @@ define([
 
       frameDialog.hide();
       jQuery(".tox-tinymce-aux").hide();
+      jQuery('.tox-hugerte-aux').hide();
 
       require(["mage/adminhtml/browser"], function () {
         MediabrowserUtility.openDialog(wUrl, false, false, typeTitle, {
@@ -230,6 +231,7 @@ define([
           closed: function () {
             frameDialog.show();
             jQuery(".tox-tinymce-aux").show();
+            jQuery('.tox-hugerte-aux').show();
           },
 
           targetElementId: tinyMCE.activeEditor

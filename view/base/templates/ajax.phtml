@@ -4,22 +4,26 @@ $htmlId             = 'magezon' . $id;
 $targetId           = $block->getTargetId();
 $ajaxData           = $block->getAjaxData() ? $block->getAjaxData() : [];
 $ajaxData['handle'] = $block->getRequest()->getFullActionName();
+
+$idJs       = $block->escapeJs($id);
+$htmlIdJs   = $block->escapeJs($htmlId);
+$targetIdJs = $block->escapeJs($targetId);
 ?>
 <?php if (isset($ajaxData['load_builder_url']) && $ajaxData['load_builder_url']) { ?>
-<div class="mgz-spinner mgz-profile-spinner <?= $htmlId ?>-spinner"><i></i></div>
-<div id="<?= $id ?>-wrapper"></div>
+<div class="mgz-spinner mgz-profile-spinner <?= $block->escapeHtmlAttr($htmlId) ?>-spinner"><i></i></div>
+<div id="<?= $block->escapeHtmlAttr($id) ?>-wrapper"></div>
 <script type="text/javascript">
 	require(['jquery'], function($) {
-		var parent = $('#<?= $targetId ?>').parent().parent();
-		var data = <?= json_encode($ajaxData, JSON_FORCE_OBJECT) ?>;
-		data['target_id']    = '<?= $targetId ?>';
-		data['html_id']      = '<?= $htmlId ?>';
+		var parent = $('#<?= /* @noEscape */ $targetIdJs ?>').parent().parent();
+		var data = <?= /* @noEscape */ json_encode($ajaxData, JSON_FORCE_OBJECT) ?>;
+		data['target_id']    = '<?= /* @noEscape */ $targetIdJs ?>';
+		data['html_id']      = '<?= /* @noEscape */ $htmlIdJs ?>';
 		$.ajax({
-            url: '<?= $this->getUrl($ajaxData['load_builder_url']) ?>',
+            url: '<?= $block->escapeJs($block->getUrl($ajaxData['load_builder_url'])) ?>',
             type:'POST',
             data: data,
             success: function(html) {
-            	$('#<?= $id ?>-wrapper').html(html);
+            	$('#<?= /* @noEscape */ $idJs ?>-wrapper').html(html);
             }
         });
 	});

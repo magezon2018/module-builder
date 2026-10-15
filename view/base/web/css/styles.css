@@ -145,6 +145,11 @@ button.mgz-btn {
 .mgz-btn.mgz-btn-delete:hover {
     background-color: #ca1c1c;
 }
+.parallax-wrapper {
+    position: relative !important;
+    overflow: hidden;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
 .mgz-icon,
 .tabs-opener:before {
     font-family: "Magezon-Icons" !important;
@@ -3293,8 +3298,17 @@ button.mgz-btn {
 .mgz-socialicons li i.mgz-fa-facebook-f {
     background: #3b5998;
 }
-.mgz-socialicons li i.mgz-fa-twitter {
-    background: #00aced;
+.mgz-socialicons li i.mgz-fa-whatsapp {
+    background: #24CC63;
+}
+.mgz-socialicons li i.mgz-fa-x-twitter {
+    background: #183153;
+}
+.mgz-socialicons li i.mgz-fa-tiktok {
+    background: #000000;
+}
+.mgz-socialicons li i.mgz-fa-bluesky {
+    background: #0c7dff;
 }
 .mgz-socialicons li i.mgz-fa-pinterest-p {
     background: #cb2027;
@@ -3942,13 +3956,13 @@ button.mgz-btn {
 .magezon-builder p {
     margin-top: 0;
 }
-.mgz-block-heading {
+/* .mgz-elem-heading-line {
     margin-bottom: 10px;
     padding-bottom: 10px;
     position: relative;
     text-align: center;
-}
-.mgz-block-heading.mgz-block-heading-line:before {
+} */
+.mgz-elem-heading-line:before {
     content: "";
     display: block;
     height: 1px;
@@ -3958,42 +3972,42 @@ button.mgz-btn {
     top: 40%;
     z-index: 0;
 }
-.mgz-block-heading.mgz-block-heading-line .title {
+.mgz-elem-heading-line .title {
     display: inline-block;
     background: #fff;
     padding: 0;
     position: relative;
 }
-.mgz-block-heading.mgz-block-heading-line h2 {
+.mgz-elem-heading-line h2 {
     font-weight: 500;
 }
-.mgz-block-heading.mgz-block-heading-line-position-bottom:before {
+.mgz-elem-heading-line-position-bottom:before {
     bottom: 0;
     top: auto;
 }
-.mgz-block-heading.mgz-block-heading-align-center {
+.mgz-elem-heading-align-center {
     text-align: center;
 }
-.mgz-block-heading.mgz-block-heading-align-center .title {
+.mgz-elem-heading-align-center .title {
     padding: 0 10px;
 }
-.mgz-block-heading.mgz-block-heading-align-left {
+.mgz-elem-heading-align-left {
     text-align: left;
 }
-.mgz-block-heading.mgz-block-heading-align-left .title {
+.mgz-elem-heading-align-left .title {
     padding-right: 10px;
 }
-.mgz-block-heading.mgz-block-heading-align-right {
+.mgz-elem-heading-align-right {
     text-align: right;
 }
-.mgz-block-heading.mgz-block-heading-align-right .title {
+.mgz-elem-heading-align-right .title {
     padding-left: 10px;
 }
-.mgz-block-heading .title {
+.mgz-elem-heading .title {
     margin: 0;
     font-weight: 400;
 }
-.mgz-block-heading .info {
+.mgz-elem-heading .info {
     margin: 0;
 }
 .mgz_fit {

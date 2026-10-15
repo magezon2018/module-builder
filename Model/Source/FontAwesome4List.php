@@ -675,11 +675,11 @@ class FontAwesome4List
 		$groups[] = [
 			'label' => __('Brand Icons'),
 			'icons' => [
-				'fa-twitter-square'       => 'Twitter Square(tweet, social network)',
+				'fa-x-twitter-square'     => 'X Square(tweet, social network)',
 				'fa-facebook-square'      => 'Facebook Square(social network)',
 				'fa-linkedin-square'      => 'LinkedIn Square',
 				'fa-github-square'        => 'GitHub Square(octocat)',
-				'fa-twitter'              => 'Twitter(tweet, social network)',
+				'fa-x-twitter'            => 'X(tweet, social network)',
 				'fa-facebook'             => 'Facebook(social network)(facebook-f)',
 				'fa-github'               => 'GitHub(octocat)',
 				'fa-pinterest'            => 'Pinterest',

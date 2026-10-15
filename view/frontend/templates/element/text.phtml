@@ -8,4 +8,4 @@ $coreHelper = $this->helper('\Magezon\Core\Helper\Data');
 $element    = $this->getElement();
 $content    = $coreHelper->filter(str_replace('<p></p>', '<br/>', $element->getData('content')));
 ?>
-<?= $content ?>
+<?= /* @noEscape */ $content ?>

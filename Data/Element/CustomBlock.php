@@ -14,6 +14,8 @@
 
 namespace Magezon\Builder\Data\Element;
 
+use Magezon\Builder\Data\Element\AbstractElement;
+
 class CustomBlock extends AbstractElement
 {
     /**

@@ -6,8 +6,8 @@ $customCss     = $builderHelper->getConfig('customization/css');
 <?php if ($rowInnerWidth || $customCss) { ?>
 <style>
 	@media (min-width: <?= (int)$rowInnerWidth ?>px) {
-		.magezon-builder .mgz-container {width: <?= $rowInnerWidth ?>;}
+		.magezon-builder .mgz-container {width: <?= /* @noEscape */ (int)$rowInnerWidth ?>px;}
 	}
-	<?= $customCss ?>
+	<?= /* @noEscape */ $customCss ?>
 </style>
 <?php } ?>

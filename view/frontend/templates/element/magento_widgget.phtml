@@ -7,4 +7,4 @@
 $coreHelper = $this->helper('\Magezon\Core\Helper\Data');
 $element    = $this->getElement();
 ?>
-<?= $coreHelper->filter($element->getData('magento_widget')) ?>
+<?= /* @noEscape */ $coreHelper->filter($element->getData('magento_widget')) ?>

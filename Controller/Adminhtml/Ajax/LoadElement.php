@@ -17,7 +17,7 @@ namespace Magezon\Builder\Controller\Adminhtml\Ajax;
 class LoadElement extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Backend\App\Action\Context
+     * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;
 

@@ -10,14 +10,14 @@ $icon          = $element->getData('icon');
 $link          = $this->getLinkParams($element->getData('link'));
 $displayAsLink = $element->getData('display_as_link');
 ?>
-<div class="mgz-button mgz-btn-style-<?= $btnStyle ?> mgz-btn-size-<?= $btnSize ?>">
-	<a href="<?= $link['url'] ?>" class="mgz-link <?= !$displayAsLink ? 'mgz-btn' : '' ?>" title="<?= $block->escapeHtml($link['title']) ?>" <?= $onclickCode ? 'onclick="' . $block->escapeHtmlAttr($onclickCode) . '"' : '' ?> <?= $link['blank'] ? 'target="_blank"' : '' ?> <?= $link['nofollow'] ? 'rel="nofollow"' : '' ?>>
+<div class="mgz-button mgz-btn-style-<?= $escaper->escapeHtmlAttr($btnStyle) ?> mgz-btn-size-<?= $escaper->escapeHtmlAttr($btnSize) ?>">
+	<a href="<?= $escaper->escapeUrl($link['url']) ?>" class="mgz-link <?= !$displayAsLink ? 'mgz-btn' : '' ?>" title="<?= $block->escapeHtml($link['title']) ?>" <?= $onclickCode ? 'onclick="' . $block->escapeHtmlAttr($onclickCode) . '"' : '' ?> <?= $link['blank'] ? 'target="_blank"' : '' ?> <?= $link['nofollow'] ? 'rel="nofollow"' : '' ?>>
 		<?php if ($addIcon && $icon && $iconPosition == 'left') { ?>
-			<i class="<?= $icon ?>"></i>
+			<i class="<?= $escaper->escapeHtmlAttr($icon) ?>"></i>
 		<?php } ?>
-		<?= $title ?>
+		<?= $escaper->escapeHtml($title) ?>
 		<?php if ($addIcon && $icon && $iconPosition == 'right') { ?>
-			<i class="<?= $icon ?>"></i>
+			<i class="<?= $escaper->escapeHtmlAttr($icon) ?>"></i>
 		<?php } ?>
 	</a>
 </div>
